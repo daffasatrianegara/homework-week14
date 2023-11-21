@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
-import { handlerLogin as loginUser } from "@/pages/api/users/login";
+import { loginUser } from "@/modules/fetch";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,7 +31,20 @@ const Navbar = () => {
     if (token) {
       setIsLogin(true);
     }
-  }, []);
+  },[] /*[window.localStorage.getItem("token")]*/);
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("token");
+    setIsLogin(false);
+    toast({
+      title: "Success",
+      description: "Logout Success",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
+  };
 
   return (
     <Flex
@@ -69,18 +82,19 @@ const Navbar = () => {
         ) : (
           <Button
             colorScheme="blue"
-            onClick={() => {
-              window.localStorage.removeItem("token");
-              setIsLogin(false);
-              toast({
-                title: "Success",
-                description: "Logout Success",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-                position: "top",
-              });
-            }}
+            onClick={handleLogout //=> 
+            //   {
+            //   handleLogout()
+            //   toast({
+            //     title: "Success",
+            //     description: "Logout Success",
+            //     status: "success",
+            //     duration: 3000,
+            //     isClosable: true,
+            //     position: "top",
+            //   });
+            // }
+          }
           >
             Logout
           </Button>
